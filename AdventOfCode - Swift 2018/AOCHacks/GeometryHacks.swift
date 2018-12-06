@@ -11,6 +11,11 @@ import Foundation
 struct Point: Equatable, Hashable {
     var x: Int
     var y: Int
+    
+    func manhattanDistanceTo(_ other: Point) -> Int {
+        return abs(x - other.x) + abs(y - other.y)
+    }
+    
 }
 
 extension Point {
@@ -24,6 +29,12 @@ extension Point {
     
     var ht: Int {
         return y
+    }
+}
+
+extension Point {
+    init(tuple: (Int, Int)) {
+        self.init(x: tuple.0, y: tuple.1)
     }
 }
 

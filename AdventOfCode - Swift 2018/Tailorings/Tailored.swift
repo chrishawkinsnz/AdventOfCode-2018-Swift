@@ -807,6 +807,33 @@ public extension Collection where Index == Int {
         }
     }
     
+    var looping: IteratorSequence<LoopingIterator<Self>> {
+        return IteratorSequence(LoopingIterator(self))
+    }
+}
+
+public extension Set {
+    func inserting(_ element: Element) -> Set<Element> {
+        var copy = self
+        copy.insert(element)
+        return copy
+    }
+}
+
+public struct LoopingIterator<C: Collection>: IteratorProtocol where C.Index == Int {
+    public var index = 0
+    
+    private var underlyingCollecction: C
+    
+    init(_ collection: C) {
+        self.underlyingCollecction = collection
+    }
+    
+    public mutating func next() -> C.Element? {
+        let element = underlyingCollecction[index]
+        index += 1
+        return element
+    }
 }
 
 public extension MutableCollection where Index == Int {

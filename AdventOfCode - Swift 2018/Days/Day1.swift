@@ -15,7 +15,7 @@ func day1Part1() {
 func day1Part2() {
     var priorSums: Set<Int> = []
     var sum: Int = 0
-    
+
     for delta in changes.looping {
         sum += delta
         if priorSums.contains(sum) { break }
