@@ -22,6 +22,20 @@ extension String {
         }
         return ints
     }
+    
+    func extractStrings(pattern: String) -> [String] {
+        let adjustedPattern = pattern.replacingOccurrences(of: "STRING", with: "(.*)")
+        let regex = try! NSRegularExpression(pattern: adjustedPattern, options: [])
+        let match = regex.firstMatch(in: self, options: [], range: NSRange(location: 0, length: self.count))!
+        
+        var strings: [String] = []
+        for i in 1..<match.numberOfRanges {
+            let range = match.range(at: i)
+            let substring = (self as NSString).substring(with: range)
+            strings += [String(substring)]
+        }
+        return strings
+    }
 }
 
 extension String {
