@@ -10,7 +10,7 @@ import Foundation
 
 extension String {
     func extractInts(pattern: String) -> [Int] {
-        let adjustedPattern = pattern.replacingOccurrences(of: "INT", with: "([0-9]+)")
+        let adjustedPattern = pattern.replacingOccurrences(of: "INT", with: "(-?[0-9]+)")
         let regex = try! NSRegularExpression(pattern: adjustedPattern, options: [])
         let match = regex.firstMatch(in: self, options: [], range: NSRange(location: 0, length: self.count))!
         

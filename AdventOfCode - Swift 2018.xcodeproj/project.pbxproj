@@ -13,6 +13,12 @@
 		0B4ED7FC21B8E45B00A8F48B /* Day6Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED7FB21B8E45B00A8F48B /* Day6Input.swift */; };
 		0B4ED7FE21BB04EA00A8F48B /* Day7Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED7FD21BB04EA00A8F48B /* Day7Input.swift */; };
 		0B4ED80021BB04F400A8F48B /* Day7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED7FF21BB04F400A8F48B /* Day7.swift */; };
+		0B4ED80221BB871800A8F48B /* Day8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80121BB871800A8F48B /* Day8.swift */; };
+		0B4ED80421BB872F00A8F48B /* Day9Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80321BB872F00A8F48B /* Day9Input.swift */; };
+		0B4ED80621BCD80200A8F48B /* Day9.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80521BCD80200A8F48B /* Day9.swift */; };
+		0B4ED80821BCD82100A8F48B /* Day8Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80721BCD82100A8F48B /* Day8Input.swift */; };
+		0B4ED80A21BE317700A8F48B /* Day10.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80921BE317600A8F48B /* Day10.swift */; };
+		0B4ED80C21BE319600A8F48B /* Day10Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80B21BE319600A8F48B /* Day10Input.swift */; };
 		0BD704D921B27A1C007D72CF /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD704D821B27A1C007D72CF /* main.swift */; };
 		0BD704E921B27A92007D72CF /* TailoredDispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD704E021B27A92007D72CF /* TailoredDispatch.swift */; };
 		0BD704EA21B27A92007D72CF /* Collections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD704E121B27A92007D72CF /* Collections.swift */; };
@@ -51,6 +57,12 @@
 		0B4ED7FB21B8E45B00A8F48B /* Day6Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day6Input.swift; sourceTree = "<group>"; };
 		0B4ED7FD21BB04EA00A8F48B /* Day7Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day7Input.swift; sourceTree = "<group>"; };
 		0B4ED7FF21BB04F400A8F48B /* Day7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day7.swift; sourceTree = "<group>"; };
+		0B4ED80121BB871800A8F48B /* Day8.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day8.swift; sourceTree = "<group>"; };
+		0B4ED80321BB872F00A8F48B /* Day9Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day9Input.swift; sourceTree = "<group>"; };
+		0B4ED80521BCD80200A8F48B /* Day9.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day9.swift; sourceTree = "<group>"; };
+		0B4ED80721BCD82100A8F48B /* Day8Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Day8Input.swift; path = ../Day8Input.swift; sourceTree = "<group>"; };
+		0B4ED80921BE317600A8F48B /* Day10.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day10.swift; sourceTree = "<group>"; };
+		0B4ED80B21BE319600A8F48B /* Day10Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day10Input.swift; sourceTree = "<group>"; };
 		0BD704D521B27A1C007D72CF /* AdventOfCode - Swift 2018 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "AdventOfCode - Swift 2018"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BD704D821B27A1C007D72CF /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		0BD704E021B27A92007D72CF /* TailoredDispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TailoredDispatch.swift; sourceTree = "<group>"; };
@@ -132,6 +144,9 @@
 				0B4ED7F521B7933100A8F48B /* Day5.swift */,
 				0B4ED7F921B8E45400A8F48B /* Day6.swift */,
 				0B4ED7FF21BB04F400A8F48B /* Day7.swift */,
+				0B4ED80121BB871800A8F48B /* Day8.swift */,
+				0B4ED80521BCD80200A8F48B /* Day9.swift */,
+				0B4ED80921BE317600A8F48B /* Day10.swift */,
 			);
 			path = Days;
 			sourceTree = "<group>";
@@ -146,6 +161,9 @@
 				0B4ED7F721B7935300A8F48B /* Day5Input.swift */,
 				0B4ED7FB21B8E45B00A8F48B /* Day6Input.swift */,
 				0B4ED7FD21BB04EA00A8F48B /* Day7Input.swift */,
+				0B4ED80721BCD82100A8F48B /* Day8Input.swift */,
+				0B4ED80321BB872F00A8F48B /* Day9Input.swift */,
+				0B4ED80B21BE319600A8F48B /* Day10Input.swift */,
 			);
 			path = Inputs;
 			sourceTree = "<group>";
@@ -223,19 +241,25 @@
 				0B4ED7FC21B8E45B00A8F48B /* Day6Input.swift in Sources */,
 				0B4ED80021BB04F400A8F48B /* Day7.swift in Sources */,
 				0BD704FF21B51CED007D72CF /* Day3.swift in Sources */,
+				0B4ED80421BB872F00A8F48B /* Day9Input.swift in Sources */,
 				0BD704EF21B27A92007D72CF /* Day1Input.swift in Sources */,
 				0BD704F421B39345007D72CF /* Day2.swift in Sources */,
 				0BD7050521B520E7007D72CF /* GeometryHacks.swift in Sources */,
 				0BD704ED21B27A92007D72CF /* TailoredCollections.swift in Sources */,
+				0B4ED80221BB871800A8F48B /* Day8.swift in Sources */,
+				0B4ED80A21BE317700A8F48B /* Day10.swift in Sources */,
 				0BD7050721B66284007D72CF /* Day4.swift in Sources */,
 				0BD704EA21B27A92007D72CF /* Collections.swift in Sources */,
 				0BD704D921B27A1C007D72CF /* main.swift in Sources */,
+				0B4ED80621BCD80200A8F48B /* Day9.swift in Sources */,
 				0BD704E921B27A92007D72CF /* TailoredDispatch.swift in Sources */,
+				0B4ED80C21BE319600A8F48B /* Day10Input.swift in Sources */,
 				0BD704EB21B27A92007D72CF /* TailoredMath.swift in Sources */,
 				0B4ED7FA21B8E45400A8F48B /* Day6.swift in Sources */,
 				0BD7050321B5208B007D72CF /* ParsingHacks.swift in Sources */,
 				0B4ED7F821B7935300A8F48B /* Day5Input.swift in Sources */,
 				0BD7050121B51CF8007D72CF /* Day3Input.swift in Sources */,
+				0B4ED80821BCD82100A8F48B /* Day8Input.swift in Sources */,
 				0BD7050921B662AE007D72CF /* Day4Input.swift in Sources */,
 				0BD704EE21B27A92007D72CF /* Day1.swift in Sources */,
 				0BD7050C21B7300A007D72CF /* DebugHacks.swift in Sources */,

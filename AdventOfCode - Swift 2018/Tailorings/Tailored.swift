@@ -797,7 +797,7 @@ public extension Collection where Index == Int {
     
     fileprivate func convert(position: Int) -> Int {
         if position < 0 {
-            return count - position
+            return position.modulo(count)
         }
         if position >= count {
             return position % count

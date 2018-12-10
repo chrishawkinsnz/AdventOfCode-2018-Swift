@@ -39,6 +39,7 @@ extension Point {
 }
 
 typealias Size = Point
+typealias Vector = Point
 
 struct Rect {
     var origin: Point
@@ -48,4 +49,13 @@ struct Rect {
         let positions = (origin.x..<origin.x + size.wd).allPairs(with: (origin.y..<origin.y + size.ht)).map { Point.init(x: $0.0, y: $0.1) }
         return positions
     }
+}
+
+
+func +(lhs: Point, rhs: Vector) -> Point {
+    return Point(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+}
+
+func +=(lhs: inout Point, rhs: Vector) {
+    lhs = Point(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
 }
