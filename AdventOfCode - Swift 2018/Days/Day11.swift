@@ -16,10 +16,7 @@ func day11Part1() {
 
 func day11Part2() {
     let grid = createScoreGrid(size: 300)
-    let winner = (1...300)
-        .map { highestPower(within: grid, withSideLength: $0) }
-        .max(by: { $0.power < $1.power} )!
-    print("\(winner.position.x),\(winner.position.y),\(winner.sideLength)")
+    print(highestPowerQuickest(within: grid, withSideLength: 0))
 }
 
 struct Score {
@@ -41,6 +38,8 @@ func createScoreGrid(size: Int) -> [[Int]] {
     return rows
 }
 
+// Tidy
+// Part 2 in ~2 hours
 func highestPower(within scores: [[Int]], withSideLength sideLength: Int) -> Score {
     let investigationPoints = (0...300-sideLength).allPairs(with: 0...300-sideLength).map(Point.init(tuple:))
     let t0 = Date()
@@ -56,12 +55,82 @@ func highestPower(within scores: [[Int]], withSideLength sideLength: Int) -> Sco
     return result
 }
 
-//Find the fuel cell's rack ID, which is its X coordinate plus 10.
-//Begin with a power level of the rack ID times the Y coordinate.
-//Increase the power level by the value of the grid serial number (your puzzle input).
-//Set the power level to itself multiplied by the rack ID.
-//Keep only the hundreds digit of the power level (so 12345 becomes 3; numbers with no hundreds digit become 0).
-//Subtract 5 from the power level.
+// Quicker
+// Part 2 in ~2 minutes
+func highestPowerQuick(within powers: [[Int]], withSideLength sideLength: Int) -> Score {
+    let t0 = Date()
+    var scores: [Score] = []
+    let maxPos = 300 - sideLength
+    for y in (0..<maxPos) {
+        print(y)
+        for x in (0..<maxPos) {
+            let maxSideLength = min((maxPos - x),(maxPos - y))
+            var sum: Int = 0
+            for size in (1...maxSideLength) {
+                for xd in 0..<size {
+                    let yd = size - 1
+                    sum += powers[y + yd][x + xd]
+                }
+                for yd in 0..<size - 1 {
+                    let xd = size - 1
+                    sum += powers[y + yd][x + xd]
+                }
+                scores += [Score.init(power: sum, position: Point(wd: x, ht: y), sideLength: size)]
+            }
+        }
+    }
+    let t1 = Date()
+    print(t1.timeIntervalSince(t0))
+    return scores.max(by: { $0.power < $1.power })!
+}
+
+// Quicker
+// Part 2 in ~10 seconds
+func highestPowerQuicker(within powers: [[Int]], withSideLength sideLength: Int) -> Score {
+    let t0 = Date()
+    // Build up summed area table
+    // This is a table of all the areas as they extend to the top left of the "screen"
+    var summedAreas: [[Int]] = Array<[Int]>(repeating: Array<Int>(repeating: 0, count: 300), count: 300)
+    
+    for y in (0..<300) {
+        var thisStripSum = 0
+        for x in (0..<300) {
+            let thisTileValue = powers[y][x]
+            thisStripSum += thisTileValue
+            let thisTileSum = thisStripSum + (summedAreas[safe: y - 1]?[x]  ?? 0)
+            summedAreas[y][x] = thisTileSum
+        }
+    }
+    print("Calculated summed areas")
+    func area(for position: Point, sideLength: Int) -> Int {
+        let x = position.x + 1
+        let y = position.y + 1
+        let delta = sideLength
+        let topLeft = summedAreas[y][x]
+        let botLeft = summedAreas[y + delta][x]
+        let topRight = summedAreas[y][x + delta]
+        let botRight = summedAreas[y + delta][x + delta]
+        return botRight - botLeft - topRight + topLeft
+    }
+    
+    var scores: [Score] = []
+    let maxPos = 300
+    for y in (0..<maxPos) {
+        print("Calculating areas at row: \(y)")
+        for x in (0..<maxPos) {
+            let maxSideLength = (min((maxPos - x),(maxPos - y)) - 1).clamped(1, 299)
+            for size in (1..<maxSideLength) {
+                let point = Point(x: x, y: y)
+                let areaValue = area(for: point, sideLength: size)
+                scores += [Score(power: areaValue, position: point, sideLength: size)]
+            }
+        }
+    }
+    
+    let t1 = Date()
+    print(t1.timeIntervalSince(t0))
+    return scores.max(by: { $0.power < $1.power })!
+}
 
 private let serialNumber: Int = 9798
 func score(for point: Point) -> Int {
