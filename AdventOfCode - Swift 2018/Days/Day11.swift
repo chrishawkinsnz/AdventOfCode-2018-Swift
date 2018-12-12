@@ -16,7 +16,7 @@ func day11Part1() {
 
 func day11Part2() {
     let grid = createScoreGrid(size: 300)
-    print(highestPowerQuickest(within: grid, withSideLength: 0))
+    print(highestPowerQuicker(within: grid, withSideLength: 0))
 }
 
 struct Score {

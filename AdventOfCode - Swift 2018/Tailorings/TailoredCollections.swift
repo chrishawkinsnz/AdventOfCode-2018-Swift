@@ -148,3 +148,21 @@ public extension Array where Element: Equatable {
         self = self.filter { $0 != element }
     }
 }
+
+
+public extension Collection where Index == Int {
+    func indexDict() -> [Index: Element] {
+        var dict: [Index: Element] = [:]
+        for (i, value) in enumerated() {
+            dict[i] = value
+        }
+        return dict
+    }
+}
+
+public extension Sequence where Element: Numeric {
+    func deltas() -> [Element] {
+        return Array(zip(self.dropFirst(), self).map { $0.0 - $0.1 })
+    }
+}
+

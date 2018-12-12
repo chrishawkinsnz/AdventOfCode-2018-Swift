@@ -21,6 +21,8 @@
 		0B4ED80C21BE319600A8F48B /* Day10Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80B21BE319600A8F48B /* Day10Input.swift */; };
 		0B4ED80E21BF7B0400A8F48B /* Day11.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80D21BF7B0400A8F48B /* Day11.swift */; };
 		0B4ED81021BF7B1900A8F48B /* Day11Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED80F21BF7B1900A8F48B /* Day11Input.swift */; };
+		0B4ED81221C115C100A8F48B /* Day12.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED81121C115C100A8F48B /* Day12.swift */; };
+		0B4ED81421C115D700A8F48B /* Day12Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4ED81321C115D600A8F48B /* Day12Input.swift */; };
 		0BD704D921B27A1C007D72CF /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD704D821B27A1C007D72CF /* main.swift */; };
 		0BD704E921B27A92007D72CF /* TailoredDispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD704E021B27A92007D72CF /* TailoredDispatch.swift */; };
 		0BD704EA21B27A92007D72CF /* Collections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD704E121B27A92007D72CF /* Collections.swift */; };
@@ -67,6 +69,8 @@
 		0B4ED80B21BE319600A8F48B /* Day10Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day10Input.swift; sourceTree = "<group>"; };
 		0B4ED80D21BF7B0400A8F48B /* Day11.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day11.swift; sourceTree = "<group>"; };
 		0B4ED80F21BF7B1900A8F48B /* Day11Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day11Input.swift; sourceTree = "<group>"; };
+		0B4ED81121C115C100A8F48B /* Day12.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day12.swift; sourceTree = "<group>"; };
+		0B4ED81321C115D600A8F48B /* Day12Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day12Input.swift; sourceTree = "<group>"; };
 		0BD704D521B27A1C007D72CF /* AdventOfCode - Swift 2018 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "AdventOfCode - Swift 2018"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BD704D821B27A1C007D72CF /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		0BD704E021B27A92007D72CF /* TailoredDispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TailoredDispatch.swift; sourceTree = "<group>"; };
@@ -152,6 +156,7 @@
 				0B4ED80521BCD80200A8F48B /* Day9.swift */,
 				0B4ED80921BE317600A8F48B /* Day10.swift */,
 				0B4ED80D21BF7B0400A8F48B /* Day11.swift */,
+				0B4ED81121C115C100A8F48B /* Day12.swift */,
 			);
 			path = Days;
 			sourceTree = "<group>";
@@ -168,8 +173,9 @@
 				0B4ED7FD21BB04EA00A8F48B /* Day7Input.swift */,
 				0B4ED80721BCD82100A8F48B /* Day8Input.swift */,
 				0B4ED80321BB872F00A8F48B /* Day9Input.swift */,
-				0B4ED80F21BF7B1900A8F48B /* Day11Input.swift */,
 				0B4ED80B21BE319600A8F48B /* Day10Input.swift */,
+				0B4ED80F21BF7B1900A8F48B /* Day11Input.swift */,
+				0B4ED81321C115D600A8F48B /* Day12Input.swift */,
 			);
 			path = Inputs;
 			sourceTree = "<group>";
@@ -247,6 +253,7 @@
 				0B4ED7FC21B8E45B00A8F48B /* Day6Input.swift in Sources */,
 				0B4ED80021BB04F400A8F48B /* Day7.swift in Sources */,
 				0BD704FF21B51CED007D72CF /* Day3.swift in Sources */,
+				0B4ED81221C115C100A8F48B /* Day12.swift in Sources */,
 				0B4ED80421BB872F00A8F48B /* Day9Input.swift in Sources */,
 				0BD704EF21B27A92007D72CF /* Day1Input.swift in Sources */,
 				0BD704F421B39345007D72CF /* Day2.swift in Sources */,
@@ -262,6 +269,7 @@
 				0BD704E921B27A92007D72CF /* TailoredDispatch.swift in Sources */,
 				0B4ED80C21BE319600A8F48B /* Day10Input.swift in Sources */,
 				0BD704EB21B27A92007D72CF /* TailoredMath.swift in Sources */,
+				0B4ED81421C115D700A8F48B /* Day12Input.swift in Sources */,
 				0B4ED7FA21B8E45400A8F48B /* Day6.swift in Sources */,
 				0BD7050321B5208B007D72CF /* ParsingHacks.swift in Sources */,
 				0B4ED7F821B7935300A8F48B /* Day5Input.swift in Sources */,
