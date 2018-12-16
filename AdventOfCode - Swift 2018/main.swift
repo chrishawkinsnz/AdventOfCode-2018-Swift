@@ -13,7 +13,7 @@ import Foundation
 print("Part1:")
 //day7Part1()
 //print("Part2:")
-day12Part2()
+day14Part2()
 
 //let t0 = Date()
 //let t1 = Date()

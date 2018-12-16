@@ -58,3 +58,9 @@ extension String {
 }
 
 
+
+extension Int {
+    var decimalDigits: [Int] {
+        return "\(self)".compactMap { String($0).intValue }
+    }
+}

@@ -166,3 +166,8 @@ public extension Sequence where Element: Numeric {
     }
 }
 
+public extension Collection where Element: Equatable {
+    func allUnique() -> Bool {
+        return self.countUnique(test: { $0 == $1 }) == self.count
+    }
+}

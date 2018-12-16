@@ -703,9 +703,9 @@ public extension Collection {
             if (valueA == valueB) {
                 let valueA: T = $0[keyPath: secondaryKeyPath]
                 let valueB: T = $1[keyPath: secondaryKeyPath]
-                return valueA > valueB
+                return valueA < valueB
             }
-            return valueA > valueB
+            return valueA < valueB
         })
     }
 }
