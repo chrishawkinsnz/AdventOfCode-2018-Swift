@@ -118,6 +118,13 @@ public extension Sequence {
     public func addMap<T> (_ transform: (Iterator.Element) -> T) -> [(Iterator.Element, T)] {
         return self.map { ($0, transform($0)) }
     }
+    
+    public func compactAddMap<T> (_ transform: (Iterator.Element) -> T?) -> [(Iterator.Element, T)] {
+        return self
+            .map { ($0, transform($0)) }
+            .filter { $0.1 != nil }
+            .map { ($0.0, $0.1!) }
+    }
 }
 
 public extension Sequence {
@@ -169,5 +176,19 @@ public extension Sequence where Element: Numeric {
 public extension Collection where Element: Equatable {
     func allUnique() -> Bool {
         return self.countUnique(test: { $0 == $1 }) == self.count
+    }
+}
+
+public extension MutableCollection {
+    func appending(_ element: Element) -> [Element] {
+        var copy = Array(self)
+        copy.append(element)
+        return copy
+    }
+    
+    func appending<S: Sequence>(contentsOf elements: S) -> [Element] where S.Element == Element {
+        var copy = Array(self)
+        copy.append(contentsOf: elements)
+        return copy
     }
 }

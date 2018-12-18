@@ -876,3 +876,10 @@ extension Collection where Element: Equatable&Hashable {
     }
 }
 
+
+
+extension String {
+    var stringChars: [String] {
+        return self.map { String($0) }
+    }
+}

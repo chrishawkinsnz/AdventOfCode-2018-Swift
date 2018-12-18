@@ -8,7 +8,13 @@
 
 import Foundation
 
-struct Point: Equatable, Hashable, CustomDebugStringConvertible {
+struct Point: Equatable, Comparable, Hashable, CustomDebugStringConvertible {
+    static func < (lhs: Point, rhs: Point) -> Bool {
+        if lhs.y < rhs.y { return true }
+        if lhs.x < rhs.y { return true }
+        return false 
+    }
+    
     var x: Int
     var y: Int
     
@@ -144,3 +150,41 @@ extension MutableCollection where Element: MutableCollection, Element.Index == I
         }
     }
 }
+
+extension Array where Element: MutableCollection, Element.Index == Int {
+    subscript(point point: Point) -> Element.Element {
+        get {
+            return self[point.y][point.x]
+        }
+        set {
+            self[point.y][point.x] = newValue
+        }
+    }
+
+}
+
+extension Collection where Element: Collection {
+    func withPoints() -> [(point: Point, Element.Element)] {
+        var accumulator: [(point: Point, Element.Element)] = []
+        for (y, row) in self.enumerated() {
+            for (x, element) in row.enumerated() {
+                accumulator.append((point: Point(x: x, y: y), element))
+            }
+        }
+        return accumulator
+    }
+}
+
+
+extension Point {
+    var upOne: Point { return Point(x: x, y: y - 1)}
+    var downOne: Point { return Point(x: x, y: y + 1)}
+    var leftOne: Point { return Point(x: x - 1, y: y )}
+    var rightOne: Point { return Point(x: x + 1, y: y )}
+    
+    var cardinallyAdjacentPoints: [Point] {
+        return [upOne, downOne, leftOne, rightOne]
+    }
+}
+
+
