@@ -12,7 +12,7 @@ fileprivate typealias Grid = [[Tile]]
 
 func day15Part1() {
     // Build grid
-    let lines = day15Input.lines
+    let lines = day15InputSimple.lines
     var grid: Grid = []
     for (y, line) in lines.enumerated() {
         var row: [Tile] = []
@@ -23,14 +23,15 @@ func day15Part1() {
         }
         grid += [row]
     }
+    print(grid: grid)
     while true {
         func allCombatants() -> [Combatant] {
             return grid.flatMap { $0 }.compactMap { $0 as? Combatant }
         }
         // attack
-        
-        for combatant in allCombatants().sorted(by: \.position) {
-//            print("combatant \(combatant)")
+        let combatants = allCombatants().sorted(by: \.position)
+        for combatant in combatants {
+            print("combatant \(combatant.team)")
             let enemies = allCombatants().filter { $0.team != combatant.team }
             var adjacentEnemy: Combatant? {
                 return combatant.position.cardinallyAdjacentPoints
@@ -42,10 +43,15 @@ func day15Part1() {
                 let nextStep = enemies
                     .flatMap { $0.position.cardinallyAdjacentPoints }
                     .filter { grid[$0] is Floor }
-                    .min(by: { $0 < $1 })
-                    .flatMap { shortestPath(from: combatant.position, to: $0, in: grid)?.first }
+                    .compactAddMap( { shortestPath(from: combatant.position, to: $0, in: grid) })
+                    .min(by: {
+                        if $0.1.count < $1.1.count { return true }
+                        if $0.1.count > $1.1.count { return false }
+                        return $0.1.first! < $1.1.first!
+                        })
+                
                 if let nextStep = nextStep {
-                    move(tile: combatant, to: nextStep, in: &grid)
+                    move(tile: combatant, to: nextStep.1.first!, in: &grid)
 //                    print("stepping to \(nextStep.debugDescription)")
                 }
                 
@@ -63,6 +69,8 @@ func day15Part1() {
     }
     print(grid: grid)
 }
+
+
 
 private func move(tile: Tile, to destination: Point, in grid: inout Grid) {
     grid[point: destination] = tile
@@ -129,7 +137,11 @@ fileprivate func shortestPath(from: Point, to: Point, in grid: Grid) -> [Point]?
         candidates = candidates
             .appending(contentsOf: connections(for: candidate))
             .filter { !visited.contains($0.value) }
-            .sorted(by: \.cost)
+            .sorted(by: { (a, b) -> Bool in
+                if a.cost < b.cost { return true }
+                if a.cost > b.cost { return false }
+                return a.value < b.value
+            })
     }
     
     return nil
@@ -220,3 +232,4 @@ func parse(tile: String, position: Point) -> Tile {
     let tileType = allTileTypes.first(where: { $0.character == tile })!
     return tileType.init(position: position)
 }
+

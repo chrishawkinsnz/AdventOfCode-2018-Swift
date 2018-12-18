@@ -11,7 +11,9 @@ import Foundation
 struct Point: Equatable, Comparable, Hashable, CustomDebugStringConvertible {
     static func < (lhs: Point, rhs: Point) -> Bool {
         if lhs.y < rhs.y { return true }
-        if lhs.x < rhs.y { return true }
+        if lhs.y > rhs.y { return false }
+        if lhs.x < rhs.x { return true }
+        if lhs.x > rhs.y { return false }
         return false 
     }
     
