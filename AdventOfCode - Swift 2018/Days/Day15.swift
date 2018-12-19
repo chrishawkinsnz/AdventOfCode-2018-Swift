@@ -11,7 +11,22 @@ import Foundation
 fileprivate typealias Grid = [[Tile]]
 
 func day15Part1() {
-    // Build grid
+    print(runSimulation(elfAttackPower: 3, elfDeathsAcceptable: true)!)
+}
+
+func day15Part2() {
+    for attackPower in 10... {
+        print(attackPower)
+        if let value = runSimulation(elfAttackPower: attackPower, elfDeathsAcceptable: false) {
+            print(value)
+            return
+        }
+    }
+}
+
+func runSimulation(elfAttackPower: Int, elfDeathsAcceptable: Bool = true) -> Int? {
+    Elf.baseAttackPower = elfAttackPower
+
     let lines = day15Input.lines
     var grid: Grid = []
     for (y, line) in lines.enumerated() {
@@ -41,7 +56,7 @@ func day15Part1() {
         }
         // attack
         let t0 = Date()
-
+        
         var combatants = allCombatants().sorted(by: \.position)
         for combatant in combatants {
             guard combatant.hp > 0 else { continue }
@@ -56,7 +71,7 @@ func day15Part1() {
                         return a.position < b.position
                     })
             }
-
+            
             if adjacentEnemy == nil && !barrenPositions[combatant.team]!.contains(combatant.position) {
                 let enemieOpenings = enemies
                     .flatMap { $0.position.cardinallyAdjacentPoints }
@@ -75,19 +90,24 @@ func day15Part1() {
             
             // if near enemy attack
             if let adjacentEnemy = adjacentEnemy {
+                print("adjacent enemy hp: \(adjacentEnemy.hp)")
                 adjacentEnemy.hp -= combatant.attack
+                print("adjacent enemy hp: \(adjacentEnemy.hp)")
                 if adjacentEnemy.hp <= 0 {
                     clearBarrennessCache()
                     grid[point: adjacentEnemy.position] = Floor(position: adjacentEnemy.position)
-                }
-                if combatants.filter({ $0.hp > 0 }).map({ $0.team }).countUnique == 1 {
-                    let remainingHp = combatants.filter { $0.hp > 0 }.map { $0.hp }.sum()
-                    print("Combat completed")
-                    print("Rounds: \(roundsCompleted)")
-                    print("Total remaining HP: \(remainingHp)")
-                }
-                // TODO attack phase
-//                print("attack them")
+                    if adjacentEnemy.team == .elf && !elfDeathsAcceptable {
+                        for _ in 0...100 { print("ABANDON TIMELINE, ELVES HAVE FALLEN") }
+                        return nil
+                    }
+                    if combatants.filter({ $0.hp > 0 }).map({ $0.team }).countUnique == 1 {
+                        let remainingHp = combatants.filter { $0.hp > 0 }.map { $0.hp }.sum()
+                        print("Combat completed")
+                        print("Rounds: \(roundsCompleted)")
+                        print("Total remaining HP: \(remainingHp)")
+                        return roundsCompleted * remainingHp
+                    }
+                }     
             }
         }
         let t1 = Date()
@@ -117,11 +137,6 @@ private func print(grid: Grid) {
         outputString += "\n"
     }
     print(outputString)
-}
-
-
-func day15Part2() {
-    
 }
 
 class GenericSearchNode<T: Equatable&Hashable> {
@@ -310,8 +325,7 @@ class Floor: Tile {
 }
 
 class Combatant: Tile {
-    
-    var attack: Int = 3
+    var attack: Int { return 3 }
     var hp: Int = 200
     
     enum Team: Hashable, Equatable {
@@ -342,6 +356,8 @@ class Goblin: Combatant {
 }
 
 class Elf: Combatant {
+    static var baseAttackPower: Int = 3
+    override var attack: Int { return Elf.baseAttackPower }
     override class var team: Team { return Combatant.Team.elf }
 }
 
