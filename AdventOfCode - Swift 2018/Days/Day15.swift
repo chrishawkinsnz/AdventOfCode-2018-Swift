@@ -12,7 +12,7 @@ fileprivate typealias Grid = [[Tile]]
 
 func day15Part1() {
     // Build grid
-    let lines = day15InputSimple.lines
+    let lines = day15Input.lines
     var grid: Grid = []
     for (y, line) in lines.enumerated() {
         var row: [Tile] = []
@@ -24,46 +24,71 @@ func day15Part1() {
         grid += [row]
     }
     print(grid: grid)
+    var barrenPositions: [Combatant.Team: Set<Point>] = [
+        .goblin: [],
+        .elf: []
+    ]
+    
     while true {
         func allCombatants() -> [Combatant] {
             return grid.flatMap { $0 }.compactMap { $0 as? Combatant }
         }
         // attack
+        let t0 = Date()
+
         let combatants = allCombatants().sorted(by: \.position)
         for combatant in combatants {
-            print("combatant \(combatant.team)")
             let enemies = allCombatants().filter { $0.team != combatant.team }
             var adjacentEnemy: Combatant? {
                 return combatant.position.cardinallyAdjacentPoints
                     .compactMap({ grid[point: $0] as? Combatant})
                     .filter({ tile in enemies.contains(where: { tile === $0 }) }).first
             }
-            // if not near enemy, move
-            if adjacentEnemy == nil {
-                let nextStep = enemies
+
+            if adjacentEnemy == nil && !barrenPositions[combatant.team]!.contains(combatant.position) {
+                let enemieOpenings = enemies
                     .flatMap { $0.position.cardinallyAdjacentPoints }
                     .filter { grid[$0] is Floor }
-                    .compactAddMap( { shortestPath(from: combatant.position, to: $0, in: grid) })
-                    .min(by: {
-                        if $0.1.count < $1.1.count { return true }
-                        if $0.1.count > $1.1.count { return false }
-                        return $0.1.first! < $1.1.first!
-                        })
+                    .sorted(by: { $0.manhattanDistanceTo(combatant.position) < $1.manhattanDistanceTo(combatant.position) })
                 
-                if let nextStep = nextStep {
-                    move(tile: combatant, to: nextStep.1.first!, in: &grid)
-//                    print("stepping to \(nextStep.debugDescription)")
+                let result = shortestPath3(from: combatant.position, toOneOf: enemieOpenings, in: grid)
+                switch result {
+                case .path(let path):
+                    move(tile: combatant, to: path.first!, in: &grid)
+                    barrenPositions[.goblin]?.removeAll(keepingCapacity: false)
+                    barrenPositions[.elf]?.removeAll(keepingCapacity: false)
+                case .noPath(let visited):
+                    visited.forEach { barrenPositions[combatant.team]?.insert($0) }
                 }
+//
+//                var accumulator: [[Point]] = []
+//
+//                for opening in enemieOpenings {
+//                    if let path = shortestPath2(from: combatant.position, to: opening, in: grid, previousClosestLength: accumulator.map { $0.count }.max() ?? 9999) {
+//                        accumulator += [path]
+//                    }
+//                }
+//                let nextStep = accumulator
+//                    .min(by: {
+//                        if $0.count < $1.count { return true }
+//                        if $0.count > $1.count { return false }
+//                        return $0.first! < $1.first!
+//                        })
+//
+//                if let nextStep = nextStep {
+//                    move(tile: combatant, to: nextStep.first!, in: &grid)
+//                }
                 
             }
             
             // if near enemy attack
             if let adjacentEnemy = adjacentEnemy {
+                // TODO attack phase
 //                print("attack them")
             }
-            
-            // TODO is in range a consideration
         }
+        let t1 = Date()
+        print(t1.timeIntervalSince(t0))
         
         print(grid: grid)
     }
@@ -110,6 +135,8 @@ class GenericSearchNode<T: Equatable&Hashable> {
 }
 var visited: [Point] = []
 
+// v1: 162.34325206279755
+// v2: 160.011234998703  // swapping sorted for min
 fileprivate func shortestPath(from: Point, to: Point, in grid: Grid) -> [Point]? {
     // TODO consider draws
     visited = []
@@ -120,9 +147,10 @@ fileprivate func shortestPath(from: Point, to: Point, in grid: Grid) -> [Point]?
     }
     
     var candidates: [GenericSearchNode<Point>] = []
-    candidates.append(.init(value: from, cost: 0, priorNode: nil, connections: { connections(for: $0) }))
-    
-    while let candidate = candidates.first {
+    var nextCandidate: GenericSearchNode<Point>? = .init(value: from, cost: 0, priorNode: nil, connections: { connections(for: $0) })
+
+    while true {
+        guard let candidate = nextCandidate else { break }
 //        print("investigating candidate")
         if candidate.value == to {
             var chain: [GenericSearchNode<Point>] = [candidate]
@@ -137,14 +165,102 @@ fileprivate func shortestPath(from: Point, to: Point, in grid: Grid) -> [Point]?
         candidates = candidates
             .appending(contentsOf: connections(for: candidate))
             .filter { !visited.contains($0.value) }
-            .sorted(by: { (a, b) -> Bool in
-                if a.cost < b.cost { return true }
-                if a.cost > b.cost { return false }
-                return a.value < b.value
-            })
+            
+        nextCandidate = candidates.min(by: { (a, b) -> Bool in
+            if a.cost < b.cost { return true }
+            if a.cost > b.cost { return false }
+            return a.value < b.value
+        })
     }
     
     return nil
+}
+
+// v3 17.114624977111816 // Considering if a previous combatant is closer
+// v4 0.5703179836273193 // Sorting openings before searching
+enum SearchResult {
+    case path(path: [Point])
+    case noPath(visited: [Point])
+}
+
+fileprivate func shortestPath2(from: Point, to: Point, in grid: Grid, previousClosestLength: Int) -> [Point]? {
+    // TODO consider draws
+    visited = []
+    func connections(for node: GenericSearchNode<Point>) -> [GenericSearchNode<Point>] {
+        return availableMoves(from: node.value, in: grid)
+            .filter { !visited.contains($0) }
+            .map { GenericSearchNode.init(value: $0, cost: node.cost + 1, priorNode: node, connections: { connections(for: $0) })}
+    }
+    
+    var candidates: [GenericSearchNode<Point>] = []
+    var nextCandidate: GenericSearchNode<Point>? = .init(value: from, cost: 0, priorNode: nil, connections: { connections(for: $0) })
+    
+    while true {
+        guard let candidate = nextCandidate else { break }
+        //        print("investigating candidate")
+        if candidate.value == to {
+            var chain: [GenericSearchNode<Point>] = [candidate]
+            var tail = candidate
+            while let prior = tail.priorNode {
+                chain.insert(prior, at: 0)
+                tail = prior
+            }
+            return Array(chain.map { $0.value }.dropFirst())
+        }
+        visited.append(candidate.value)
+        candidates = candidates
+            .appending(contentsOf: connections(for: candidate))
+            .filter { !visited.contains($0.value) }
+        
+        nextCandidate = candidates.min(by: { (a, b) -> Bool in
+            if a.cost < b.cost { return true }
+            if a.cost > b.cost { return false }
+            return a.value < b.value
+        })
+        if nextCandidate != nil && nextCandidate!.cost + nextCandidate!.value.manhattanDistanceTo(to) > previousClosestLength {
+            return nil
+        }
+    }
+    
+    return nil
+}
+
+fileprivate func shortestPath3(from: Point, toOneOf destinations: [Point], in grid: Grid) -> SearchResult {
+    // TODO consider draws
+    visited = []
+    func connections(for node: GenericSearchNode<Point>) -> [GenericSearchNode<Point>] {
+        return availableMoves(from: node.value, in: grid)
+            .filter { !visited.contains($0) }
+            .map { GenericSearchNode.init(value: $0, cost: node.cost + 1, priorNode: node, connections: { connections(for: $0) })}
+    }
+    
+    var candidates: [GenericSearchNode<Point>] = []
+    var nextCandidate: GenericSearchNode<Point>? = .init(value: from, cost: 0, priorNode: nil, connections: { connections(for: $0) })
+    
+    while true {
+        guard let candidate = nextCandidate else { break }
+        //        print("investigating candidate")
+        if destinations.contains(candidate.value) {
+            var chain: [GenericSearchNode<Point>] = [candidate]
+            var tail = candidate
+            while let prior = tail.priorNode {
+                chain.insert(prior, at: 0)
+                tail = prior
+            }
+            return SearchResult.path(path: Array(chain.map { $0.value }.dropFirst()))
+        }
+        visited.append(candidate.value)
+        candidates = candidates
+            .appending(contentsOf: connections(for: candidate))
+            .filter { !visited.contains($0.value) }
+        
+        nextCandidate = candidates.min(by: { (a, b) -> Bool in
+            if a.cost < b.cost { return true }
+            if a.cost > b.cost { return false }
+            return a.value < b.value
+        })
+    }
+    return SearchResult.noPath(visited: visited)
 }
 
 private func availableMoves(from: Point, in grid: Grid) -> [Point] {
@@ -190,7 +306,7 @@ class Floor: Tile {
 }
 
 class Combatant: Tile {
-    enum Team {
+    enum Team: Hashable, Equatable {
         case goblin
         case elf
     }
