@@ -29,6 +29,12 @@ func day15Part1() {
         .elf: []
     ]
     
+    func clearBarrennessCache() {
+        barrenPositions[.goblin]?.removeAll(keepingCapacity: false)
+        barrenPositions[.elf]?.removeAll(keepingCapacity: false)
+    }
+    
+    var roundsCompleted: Int = 0
     while true {
         func allCombatants() -> [Combatant] {
             return grid.flatMap { $0 }.compactMap { $0 as? Combatant }
@@ -36,13 +42,19 @@ func day15Part1() {
         // attack
         let t0 = Date()
 
-        let combatants = allCombatants().sorted(by: \.position)
+        var combatants = allCombatants().sorted(by: \.position)
         for combatant in combatants {
+            guard combatant.hp > 0 else { continue }
             let enemies = allCombatants().filter { $0.team != combatant.team }
             var adjacentEnemy: Combatant? {
                 return combatant.position.cardinallyAdjacentPoints
                     .compactMap({ grid[point: $0] as? Combatant})
-                    .filter({ tile in enemies.contains(where: { tile === $0 }) }).first
+                    .filter({ tile in enemies.contains(where: { tile === $0 }) })
+                    .min(by: { a, b in
+                        if a.hp < b.hp { return true }
+                        if a.hp > b.hp { return false }
+                        return a.position < b.position
+                    })
             }
 
             if adjacentEnemy == nil && !barrenPositions[combatant.team]!.contains(combatant.position) {
@@ -55,34 +67,25 @@ func day15Part1() {
                 switch result {
                 case .path(let path):
                     move(tile: combatant, to: path.first!, in: &grid)
-                    barrenPositions[.goblin]?.removeAll(keepingCapacity: false)
-                    barrenPositions[.elf]?.removeAll(keepingCapacity: false)
+                    clearBarrennessCache()
                 case .noPath(let visited):
                     visited.forEach { barrenPositions[combatant.team]?.insert($0) }
                 }
-//
-//                var accumulator: [[Point]] = []
-//
-//                for opening in enemieOpenings {
-//                    if let path = shortestPath2(from: combatant.position, to: opening, in: grid, previousClosestLength: accumulator.map { $0.count }.max() ?? 9999) {
-//                        accumulator += [path]
-//                    }
-//                }
-//                let nextStep = accumulator
-//                    .min(by: {
-//                        if $0.count < $1.count { return true }
-//                        if $0.count > $1.count { return false }
-//                        return $0.first! < $1.first!
-//                        })
-//
-//                if let nextStep = nextStep {
-//                    move(tile: combatant, to: nextStep.first!, in: &grid)
-//                }
-                
             }
             
             // if near enemy attack
             if let adjacentEnemy = adjacentEnemy {
+                adjacentEnemy.hp -= combatant.attack
+                if adjacentEnemy.hp <= 0 {
+                    clearBarrennessCache()
+                    grid[point: adjacentEnemy.position] = Floor(position: adjacentEnemy.position)
+                }
+                if combatants.filter({ $0.hp > 0 }).map({ $0.team }).countUnique == 1 {
+                    let remainingHp = combatants.filter { $0.hp > 0 }.map { $0.hp }.sum()
+                    print("Combat completed")
+                    print("Rounds: \(roundsCompleted)")
+                    print("Total remaining HP: \(remainingHp)")
+                }
                 // TODO attack phase
 //                print("attack them")
             }
@@ -91,6 +94,7 @@ func day15Part1() {
         print(t1.timeIntervalSince(t0))
         
         print(grid: grid)
+        roundsCompleted += 1
     }
     print(grid: grid)
 }
@@ -306,6 +310,10 @@ class Floor: Tile {
 }
 
 class Combatant: Tile {
+    
+    var attack: Int = 3
+    var hp: Int = 200
+    
     enum Team: Hashable, Equatable {
         case goblin
         case elf
