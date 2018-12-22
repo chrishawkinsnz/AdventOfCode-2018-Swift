@@ -204,6 +204,7 @@ func print(grid: [[PointPrintable?]]) {
         for x in bounds.yRange {
             line += grid[point: Point(x: x, y: y)]?.displayCharacter ?? " "
         }
+        line += "\n"
         string += line
     }
     print(string)
