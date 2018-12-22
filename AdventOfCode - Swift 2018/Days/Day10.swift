@@ -47,10 +47,10 @@ func day10Part2() {
 }
 
 struct Bounds {
-    let minX: Int
-    let maxX: Int
-    let minY: Int
-    let maxY: Int
+    var minX: Int
+    var maxX: Int
+    var minY: Int
+    var maxY: Int
     
     init(wrapping points: [Point]) {
         minX = points.map { $0.x }.min()!

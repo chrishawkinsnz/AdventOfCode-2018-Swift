@@ -190,3 +190,7 @@ extension Point {
 }
 
 
+protocol PointPrintable {
+    var position: Point { get }
+    var displayCharacter: String { get }
+}

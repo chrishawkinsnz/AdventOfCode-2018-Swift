@@ -90,9 +90,7 @@ func runSimulation(elfAttackPower: Int, elfDeathsAcceptable: Bool = true) -> Int
             
             // if near enemy attack
             if let adjacentEnemy = adjacentEnemy {
-                print("adjacent enemy hp: \(adjacentEnemy.hp)")
                 adjacentEnemy.hp -= combatant.attack
-                print("adjacent enemy hp: \(adjacentEnemy.hp)")
                 if adjacentEnemy.hp <= 0 {
                     clearBarrennessCache()
                     grid[point: adjacentEnemy.position] = Floor(position: adjacentEnemy.position)
@@ -287,7 +285,7 @@ private func availableMoves(from: Point, in grid: Grid) -> [Point] {
         .filter { grid[point: $0] is Floor }
 }
 
-protocol Tile: class {
+fileprivate protocol Tile: class {
     func combatPhase()
     func movementPhase()
     
@@ -368,7 +366,7 @@ private var allTileTypes: [Tile.Type] = [
     Elf.self
 ]
 
-func parse(tile: String, position: Point) -> Tile {
+fileprivate func parse(tile: String, position: Point) -> Tile {
     let tileType = allTileTypes.first(where: { $0.character == tile })!
     return tileType.init(position: position)
 }
