@@ -192,3 +192,9 @@ public extension MutableCollection {
         return copy
     }
 }
+
+public extension Collection where Element: Equatable {
+    func megaMap() -> Bool {
+        return self.countUnique(test: { $0 == $1 }) == self.count
+    }
+}

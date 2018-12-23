@@ -162,7 +162,27 @@ extension Array where Element: MutableCollection, Element.Index == Int {
             self[point.y][point.x] = newValue
         }
     }
+}
 
+extension Array where Element: MutableCollection, Element.Index == Int {
+    subscript(safePoint point: Point) -> Element.Element? {
+        get {
+            guard let row = self[safe: point.y] else { return nil }
+            guard (row.startIndex..<row.endIndex).contains(point.x) else { return nil }
+            return row[point.x]
+        }
+        set {
+            guard let newElement = newValue else { return }
+            guard self.count > point.y && point.y >= 0 else { return }
+            self[point.y][point.x] = newElement
+        }
+    }
+}
+
+extension Array where Element: Collection {
+    func megaMap<T>(mapping: (Element.Element) -> T) -> [[T]] {
+        return self.map { $0.map(mapping) }
+    }
 }
 
 extension Collection where Element: Collection {
@@ -186,6 +206,13 @@ extension Point {
     
     var cardinallyAdjacentPoints: [Point] {
         return [upOne, downOne, leftOne, rightOne]
+    }
+    
+    var eightAdjacentPoints: [Point] {
+        return [
+            upOne, downOne, leftOne, rightOne,
+            rightOne.upOne, upOne.leftOne, leftOne.downOne, downOne.rightOne
+        ]
     }
 }
 

@@ -883,3 +883,10 @@ extension String {
         return self.map { String($0) }
     }
 }
+
+
+func dumpWhitespace() {
+    for _ in 0..<100 {
+        print(" ")
+    }
+}
