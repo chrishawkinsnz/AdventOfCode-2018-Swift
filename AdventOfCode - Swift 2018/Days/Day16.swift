@@ -93,9 +93,9 @@ enum ValueType {
 
 struct Operation {
     var opCode: OpCode
-    private var a: Int
-    private var b: Int
-    private var c: Int
+    var a: Int
+    var b: Int
+    var c: Int
     
     init(string: String, codeMapping: [Int: OpCode]) {
         let opNumbers = string.extractInts(pattern: "INT INT INT INT")
@@ -128,9 +128,9 @@ struct Operation {
         
         switch opCode.baseType {
         case .add:
-            setValue(a &+ b)
+            setValue(a + b)
         case .mul:
-            setValue((a &* b))
+            setValue(a * b)
         case .ban:
             setValue(a & b)
         case .bor:

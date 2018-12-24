@@ -8,12 +8,7 @@
 
 import Foundation
 
-
-
-print("Part1:")
-//day7Part1()
-//print("Part2:")
-day18Part1()
+day20Part1()
 
 //let t0 = Date()
 //let t1 = Date()

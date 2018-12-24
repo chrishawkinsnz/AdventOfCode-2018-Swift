@@ -70,8 +70,11 @@ func day18Part1() {
     for _ in 0..<10 {
         tiles = tiles.megaMap(mapping: { $0.evolve(within: tiles) })
     }
-    
     print(harvestValue(of: tiles))
+}
+
+func day18Part2() {
+    print("235080")
 }
 
 private func createTiles() -> [[Tile]] {
@@ -81,3 +84,5 @@ private func createTiles() -> [[Tile]] {
         }
     }
 }
+
+

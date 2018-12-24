@@ -28,6 +28,9 @@ struct Point: Equatable, Comparable, Hashable, CustomDebugStringConvertible {
         return "<\(x),\(y)>"
     }
 
+    func moved(_ direction: CardinalDirection) -> Point {
+        return move(self, direction: direction)
+    }
 }
 
 extension Point {
@@ -122,6 +125,25 @@ enum CardinalDirection:Int {
     
     var toTheRight: CardinalDirection {
         return CardinalDirection(rawValue: (rawValue - 1).modulo(4))!
+    }
+    
+    init?(string: String) {
+        switch string {
+        case "N": self = .north
+        case "E": self = .east
+        case "W": self = .west
+        case "S": self = .south
+        default: return nil
+        }
+    }
+    
+    var letter: String {
+        switch self {
+        case .north: return "N"
+        case .east: return "E"
+        case .west: return "W"
+        case .south: return "S"
+        }
     }
 }
 

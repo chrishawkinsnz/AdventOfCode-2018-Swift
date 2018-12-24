@@ -198,3 +198,17 @@ public extension Collection where Element: Equatable {
         return self.countUnique(test: { $0 == $1 }) == self.count
     }
 }
+
+public extension Collection where Index: Strideable, Index.Stride: SignedInteger{
+    func indexRange() -> CountableRange<Index> {
+        return startIndex..<endIndex
+    }
+    
+}
+
+public extension Array {
+    mutating func popFirst() -> Element? {
+        guard !self.isEmpty else { return nil }
+        return remove(at: 0)
+    }
+}
