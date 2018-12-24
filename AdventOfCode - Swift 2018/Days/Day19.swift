@@ -13,7 +13,16 @@ func day19Part1() {
 }
 
 func day19Part2() {
-    print(runSimulation(program: day19Input, instructionRegister: day19InstructionRegister, initialRegisters: [1,0,0,0,0,0]))
+//    print(runSimulation(program: day19Input, instructionRegister: day19InstructionRegister, initialRegisters: [0,0,0,0,0,0]))
+    
+    let r2 = 10551277 // The state of r2 on entering the loop phase
+    
+    let result = (1...r2)
+        .filter ({ r2 % $0 == 0})
+        .reduce(0, +)
+    
+    print(result)
+
 }
 
 private func runSimulation(program: String, instructionRegister: Int, initialRegisters: [Int]) -> Int {
@@ -21,17 +30,15 @@ private func runSimulation(program: String, instructionRegister: Int, initialReg
     var registers = initialRegisters
     var instructionPointer = 0
     var iterations: Int = 0
-    var history: [([Int], Operation)] = []
     while instructionRegister >= 0 && instructionPointer < instructions.count {
+        if instructionPointer == 1 {
+            print(registers[2]) // The number part 2 wants to find the factors of (10551277)
+        }
         iterations += 1
-//        printEvery(nTimes: 1000, output: "\(iterations)")
         print("line \(instructionPointer + 1)")
         registers[instructionRegister] = instructionPointer
         registers = instructions[instructionPointer].execute(registers: registers)
         instructionPointer = registers[instructionRegister] + 1
-        if iterations > 100 {
-            fatalError()
-        }
     }
     return registers[0]
 }

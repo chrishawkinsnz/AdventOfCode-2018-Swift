@@ -16,8 +16,20 @@ func day20Part1() {
     let map = buildMap(from: rootGraphNode)
     let dist = futhestDistance(from: map)
     
-    printMaze(map)
     print(dist)
+}
+
+func day20Part2() {
+    let input = day20Input
+    
+    let sanitizedInput = String(input.dropFirst().dropLast())
+    let tokens = sanitizedInput.map { Token.init(String($0)) }
+    let rootGraphNode = createGraph(from: tokens)
+    let map = buildMap(from: rootGraphNode)
+    let count = countToomsFurtherThan(limit: 1000, from: map)
+    
+    // 8491 too low
+    print(count)
 }
 
 fileprivate enum MetaToken: String {
@@ -128,6 +140,11 @@ fileprivate func buildMap(from graph: MazeNode) -> MazeMap {
 fileprivate func futhestDistance(from map: MazeMap) -> Int {
     let records = findFurthestDistances(within: map, from: Point(x: 0, y: 0), walkDistance: 0, records: [:])
     return records.map { $0.value }.max()!
+}
+
+fileprivate func countToomsFurtherThan(limit: Int, from map: MazeMap) -> Int {
+    let records = findFurthestDistances(within: map, from: Point(x: 0, y: 0), walkDistance: 0, records: [:])
+    return records.count(where: { $0.value >= limit })
 }
 
 fileprivate func findFurthestDistances(within map: MazeMap, from start: Point, walkDistance: Int, records: [Point: Int]) -> [Point: Int] {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-day20Part1()
+day19Part2()
 
 //let t0 = Date()
 //let t1 = Date()
